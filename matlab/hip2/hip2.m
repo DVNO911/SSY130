@@ -100,20 +100,20 @@ ylabel('arg(H)');
 
 % Plot the reference signals
 figure(4);
-plot(observation);
+plot(noisy_position);
 hold on;
-plot(signal);
+plot(true_position);
 title('Reference signals');
 ylabel('Some unit?');
 xlabel('Some unit?');
-legend('Obs', 'Sig');
+legend('Noisy position', 'True position');
 
 % Generate a plot of the noise frequency distribution
 % We can "cheat" and get the noise by subtracting the true signal from the
-% observed signal
-n = observation - signal;
+%  measured position
+n = noisy_position - true_position;
 figure(5);
-plot(abs(fft(n)));
+plot(abs(fft(n)).^2);
 xlabel('Some frequency unit?');
-ylabel('Noise magnitude');
-title('Frequency distribution of noise in signal');
+ylabel('Periodogram of noise');
+title('Frequency distribution of noise in measured position');
