@@ -73,7 +73,7 @@ funs = student_sols();
 
 % Set up ground-truth motion
 x = 0:0.01:9.99;
-y = [ones(1,499), 1:-0.002:0];
+y = sin(0.5*x);
 Y = [x;y];
 Z = Y + 0.1*randn(size(Y));
 
