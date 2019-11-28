@@ -5,6 +5,9 @@
 #ifdef MP3_DATA_FUR_ELISE
 extern const char mp3_data[599832];
 #endif
+#ifdef MP3_DATA_ZHONTI
+extern const char mp3_data[776592];
+#endif
 #ifdef MP3_DATA_FLY
 extern const char mp3_data[480672];
 #endif
