@@ -9,7 +9,7 @@ function [funs, student_id] = student_sols()
 % Should a numeric value of format YYYYMMDD, e.g.
 % student_id = 19900101;
 % This value must be correct in order to generate a valid secret key.
-student_id = 0;
+student_id = 19970208;
 
 
 % ----------------------------------------
@@ -23,13 +23,14 @@ student_id = 0;
 	function z = add_cyclic_prefix(x,Ncp)  %#ok<*INUSD>
 		% Adds (prepends) a Ncp long cyclic prefix to the ofdm block x.
 		x = x(:);   %#ok<*NASGU> % Ensure x is a column vector
-		z = 0; %TODO: This line is missing some code!
+		x_end = x(length(x)-Ncp+1: length(x));
+		z = [x_end; x];
     end
 
     function x = remove_cyclic_prefix(z,Ncp)
         % Removes a Ncp long cyclic prefix from the ofdm package z
         z = z(:);   % Ensure z is a column vector
-        x = 0; %TODO: This line is missing some code!
+        x = z(Ncp+1: length(z));
     end
 
     function symb = bits2qpsk(bits)
@@ -53,12 +54,19 @@ student_id = 0;
         bits = bits(:);
         bits(bits ~= 0) = 1;
         bits(bits == 0) = -1;
-
+	
         if rem(length(bits),2) == 1
             error('bits must be of even length');
         end
+        length(bits)
+        symb = zeros(length(bits)/2);
+        length(symb)
+        
+        symb = [];
+        for i = 1:2:length(bits)
+        symb = [symb; (1/sqrt(2))*(sign(bits(i))+ j*sign(bits(i+1)));
+        end
 
-        symb = 0; %TODO: This line is missing some code!
     end
 
     function bits  = qpsk2bits(x)
