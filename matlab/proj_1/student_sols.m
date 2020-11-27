@@ -367,10 +367,10 @@ student_id = 19970208;
         
         % Upsample by a factor L, i.e. insert L-1 zeros after each original
         % sample
-        zup(1:L:end) = 0; %TODO: This line is missing some code!
+        zup(1:L:end) = x(1:end); %TODO: This line is missing some code!
         
         % Apply the LP filter to the upsampled (unfiltered) signal.
-        z = 0; %TODO: This line is missing some code!
+        z = conv(hlp, zup); %TODO: This line is missing some code!
     end
 
     function z = frame_decimate(x,L,hlp)
@@ -396,10 +396,10 @@ student_id = 19970208;
         hlp = hlp(:);
         
         % Apply the lowpass filter to avoid aliasing when decimating
-        xf = 0; %TODO: This line is missing some code!
+        xf = conv(hlp,x); %TODO: This line is missing some code!
         
         % Downsample by keeping samples [1, 1+L, 1+2*L, ...]
-        z = 0; %TODO: This line is missing some code!
+        z = xf(1:L:end); %TODO: This line is missing some code!
     end
 
     function z = frame_modulate(x, theta)
@@ -421,7 +421,7 @@ student_id = 19970208;
        
        % Modulate x by multiplying the samples with the complex exponential
        % exp(i * 2 * pi * theta * n)
-       z = 0; %TODO: This line is missing some code!
+       z = x.*exp(i * 2 * pi * theta * n); %TODO: This line is missing some code!
     end
 
     function [rx, evm, ber, symbs] = sim_ofdm_audio_channel(tx, N_cp, snr, sync_err, f_s, f_c, L)
@@ -489,8 +489,8 @@ student_id = 19970208;
         tx.p = tx.p(:);
         
         % Convert bits to QPSK symbols
-        x.p = 0; %TODO: This line is missing some code!
-        x.d = 0; %TODO: This line is missing some code!
+        x.p = funs.bits2qpsk(tx.p); %TODO: This line is missing some code!
+        x.d = funs.bits2qpsk(tx.d); %TODO: This line is missing some code!
 
         symbs.tx = x.d;   % Store transmitted data symbols for later
 
@@ -501,21 +501,21 @@ student_id = 19970208;
         end
 
         % Create OFDM time-domain block using IDFT
-        z.p = 0; %TODO: This line is missing some code!
-        z.d = 0; %TODO: This line is missing some code!
+        z.p = ifft(x.p); %TODO: This line is missing some code!
+        z.d = ifft(x.d); %TODO: This line is missing some code!
 
         % Add cyclic prefix to create OFDM package
-        zcp.p = 0; %TODO: This line is missing some code!
-        zcp.d = 0; %TODO: This line is missing some code!
+        zcp.p = funs.add_cyclic_prefix(z.p,N_cp); %TODO: This line is missing some code!
+        zcp.d = funs.add_cyclic_prefix(z.d,N_cp); %TODO: This line is missing some code!
         
         % Concatenate the messages
-        tx_frame = 0; %TODO: This line is missing some code!
+        tx_frame = funs.concat_packages(zcp.p,zcp.d); %TODO: This line is missing some code!
         
         % Increase the sample rate by interpolation
-        tx_frame_us = 0; %TODO: This line is missing some code!
+        tx_frame_us = funs.frame_interpolate(tx_frame,L); %TODO: This line is missing some code!
         
         % Modulate the upsampled signal
-        tx_frame_mod = 0; %TODO: This line is missing some code!
+        tx_frame_mod = funs.frame_modulate(tx_frame_us,f_c/f_s); %TODO: This line is missing some code!
         
         % Discard the imaginary part of the signal for transmission over a
         % scalar channel (simulation of audio over air)
@@ -528,32 +528,32 @@ student_id = 19970208;
         rx_frame_raw = rx_frame_raw(rx_idx:rx_idx + length(tx_frame_final));
         
         % Demodulate to bring the signal back to the baseband
-        rx_frame_us = 0; %TODO: This line is missing some code!
+        rx_frame_us = funs.frame_modulate(rx_frame_raw,-f_c/f_s); %TODO: This line is missing some code!
         
         % Decimate the signal to bring the sample rate back to the original
-        rx_frame = frame_decimate(rx_frame_us, L);
+        rx_frame = funs.frame_decimate(rx_frame_us, L);
         
         % Discard samples beyond OFDM frame
         rx_frame = rx_frame(1:2*(N+N_cp));
         
         % Split frame into packages
         ycp = struct();
-        [ycp.p, ycp.d] = 0; %TODO: This line is missing some code!
+        [ycp.p, ycp.d] = funs.split_frame(rx_frame); %TODO: This line is missing some code!
         
         % Remove cyclic prefix
-        y.p = 0; %TODO: This line is missing some code!
-        y.d = 0; %TODO: This line is missing some code!
+        y.p = funs.remove_cyclic_prefix(ycp.p,N_cp); %TODO: This line is missing some code!
+        y.d = funs.remove_cyclic_prefix(ycp.d,N_cp); %TODO: This line is missing some code!
 
         % Convert to frequency domain using DFT
-        r.p = 0; %TODO: This line is missing some code!
-        r.d = 0; %TODO: This line is missing some code!
+        r.p = fft(y.p); %TODO: This line is missing some code!
+        r.d = fft(y.d); %TODO: This line is missing some code!
         symbs.rx_pe = r.d; % Store symbols for later
         
         % Esimate channel
-        H = 0; %TODO: This line is missing some code!
+        H = r.p./x.p; %TODO: This line is missing some code!
 
         % Remove effect of channel on the data package by equalization.
-        r_eq = 0; %TODO: This line is missing some code!
+        r_eq = conj(H).*r.d./abs(H).^2; %TODO: This line is missing some code!
 
         symbs.rx_e = r_eq; %Store symbols for later
 
@@ -562,7 +562,7 @@ student_id = 19970208;
         evm = norm(x.d - r_eq)/sqrt(N);
 
         % Convert the recieved symsbols to bits
-        rx = 0; %TODO: This line is missing some code!
+        rx = funs.qpsk2bits(r_eq); %TODO: This line is missing some code!
 
         % Calculate the bit error rate (BER).
         % This indicates the relative number of bit errors.

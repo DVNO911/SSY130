@@ -63,6 +63,7 @@
 % Do some cleanup
 clc
 clear variables
+close all
 format short eng
 
 % Perform all self-tests of functions in student_sol.m
@@ -89,13 +90,13 @@ figure(2);
 N_fft = 1e3;    %Zero-pad FFT for increased frequency resolution
 plot(abs(fft(h, N_fft)));
 title('Filter magnitude response');
-xlabel('A frequency unit (which?)');
+xlabel('f_s/1000');
 ylabel('|H|');
 
 figure(3);
 plot(unwrap(angle(fft(h, N_fft))));
 title('Filter phase response');
-xlabel('A frequency unit (which?)');
+xlabel('f_s/1000');
 ylabel('arg(H)');
 
 % Plot the reference signals

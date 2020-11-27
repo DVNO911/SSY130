@@ -86,7 +86,7 @@ funs = student_sols();
 % project report.
 
 N = 272;         % Number of OFDM (QPSK) symbols to transmit.   
-N_cp = 10;        % Length of cyclic prefix
+N_cp = 60;        % Length of cyclic prefix
 snr = inf;       % Receiver side SNR [dB]
 sync_err = 0;    % Negative values imply early frame sync
 channel_known = true;   %Set true to use the known channel, false to use the unknown channel
@@ -118,7 +118,7 @@ pilot = string2bits(pilot_str);
 %h = zeros(60,1); h(1) = 1;   % Ideal
 %h = zeros(60,1); h(1) = 0.5; % Ideal, scaled magnitude
 %h = zeros(60,1); h(1) = exp(1j*1/2);    % Ideal, phase shift by 1/2 radian (~28 degrees)
-h = 0.8.^(0:59)'%0.8.^(0:59)';            % LP model
+h = 0.8.^(0:59)';%0.8.^(0:59)';            % LP model
 %h = zeros(60,1); h(1) = 0.5; h(9) = 0.5; % Multipath (2 paths)
 %h = randn(60,1);             % Random Gaussian 
 
@@ -141,7 +141,8 @@ clean_str = @(str) regexprep(str, '[^ -~]+', '_');
 % Simulate baseband OFDM communication
 
 if channel_known
-   [rx, evm, ber, symbs] = funs.sim_ofdm_known_channel(tx, h, N_cp, snr, sync_err); 
+   [rx, evm, ber, symbs] = funs.sim_ofdm_known_channel(tx, h, N_cp, snr, sync_err);
+   symbs
 else
     tx_s.d = tx;
     tx_s.p = pilot;

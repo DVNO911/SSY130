@@ -28,6 +28,8 @@
 
 #define LAB_OFDM_AMP_SCALE 	(6)
 
+//#define PI (3.142857)
+
 char message[LAB_OFDM_CHAR_MESSAGE_SIZE];
 char rec_message[LAB_OFDM_CHAR_MESSAGE_SIZE];
 char pilot_message[LAB_OFDM_CHAR_MESSAGE_SIZE];
@@ -191,7 +193,7 @@ void ofdm_modulate(float * pRe, float * pIm, float* pDst, float f , int length){
 	*/
 	int i;
 	float inc,omega=0;
-	inc = 2*f*M_PI;
+	inc = 2*f*PI;
 	for(i=0; i< length; i++ ){
 		pDst[i] = pRe[i] * arm_cos_f32(omega) - pIm[i] * arm_sin_f32(omega);
 		omega += inc;
@@ -251,7 +253,14 @@ void ofdm_demodulate(float * pSrc, float * pRe, float * pIm,  float f, int lengt
 	DO_OFDM_DEMODULATE();
 #else
 	/* TODO: Add code from here... */
-
+	float omega = 0;
+	float inc = -2*PI*f;
+	int i;
+	for(i = 0; i < length; i++) {
+		pRe[i] = pSrc[i]*arm_sin_f32(omega);
+		pIm[i] = pSrc[i]*arm_cos_f32(omega);
+		omega = omega + inc;
+	}
 	/* ...to here */
 #endif
 }
@@ -267,7 +276,13 @@ void cnvt_re_im_2_cmplx( float * pRe, float * pIm, float * pCmplx, int length ){
 		DO_OFDM_RE_IM_2_CMPLX();
 #else
 	/* TODO: Add code from here... */
-
+	int i;
+	int j = 0;
+	for(i = 0; i<2*length; i=i+2) {
+		pCmplx[i] = pRe[j];
+		pCmplx[i+1] = pIm[j];
+		j++;
+	}
 	/* ...to here */
 #endif
 }
@@ -295,6 +310,7 @@ void ofdm_conj_equalize(float * prxMes, float * prxPilot,
 	*/
 	//Temporary storage array for general-purpose use
 	float pTmp[2*length];
+	float pTmp2[2*length];
 #ifdef MASTER_MODE
 #include "../../secret_sauce.h"
 	DO_OFDM_CONJ_EQUALIZE();
@@ -308,6 +324,13 @@ void ofdm_conj_equalize(float * prxMes, float * prxPilot,
 	* vector of up to length elements. */
 	
 	/* TODO: Add code from here...*/
+	
+	arm_cmplx_conj_f32(ptxPilot, pTmp, length);
+	arm_cmplx_mult_cmplx_f32(pTmp, prxPilot, pTmp2, length);
+	
+	arm_cmplx_conj_f32(pTmp2, hhat_conj, length); //hhatconj
+
+	arm_cmplx_mult_cmplx_f32(prxMes, hhat_conj, pEqualized, length);
 
 	/* ...to here */
 #endif
