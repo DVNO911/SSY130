@@ -118,3 +118,47 @@ plot(abs(fft(n)).^2);
 xlabel('Some frequency unit?');
 ylabel('Periodogram of noise');
 title('Frequency distribution of noise in measured position');
+
+% Task 4
+noisy_conv = conv(noisy_position,h).*3.6;
+true_conv = conv(true_position,h).*3.6;
+figure(7)
+plot(noisy_conv(1:end))
+hold on
+plot(true_conv(1:end), '--')
+axis([0 600 0 220])
+xlabel('Time [s]');
+ylabel('Velocity [km/h]');
+title('Filtered velocity in km/h');
+legend('Filtered noisy velocity', 'Filtered true velocity');
+
+%Compensation for delay
+figure(8)
+plot(noisy_conv(61:end))
+hold on
+plot(true_conv(61:end), '--')
+axis([0 600 0 220])
+xlabel('Time [s]');
+ylabel('Velocity [km/h]');
+title('Filtered velocity in km/h with delay compensated');
+legend('Filtered noisy velocity', 'Filtered true velocity');
+
+% Compensated delay compared to original
+figure(9)
+plot(noisy_conv(1:end))
+hold on
+plot(true_conv(1:end), '--')
+plot(noisy_conv(61:end))
+plot(true_conv(61:end), '--')
+axis([0 600 0 220])
+xlabel('Time [s]');
+ylabel('Velocity [km/h]');
+title('Filtered velocity in km/h with and withoutdelay compensated');
+legend('Filtered noisy', 'Filtered true', 'Filtered, compensated noisy', 'Filtered, compensated true');
+
+y1 = [noisy_position; fliplr(noisy_position)];
+y2 = [noisy_position; zeros(length(noisy_position),1)];
+figure(10)
+plot(conv(y1,h))
+hold on
+plot(conv(y2,h))
