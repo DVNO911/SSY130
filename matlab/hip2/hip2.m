@@ -81,21 +81,24 @@ load hip2.mat
 % Here are some sample plots to illustrate the behavior of your filter.
 % Feel free to modify, re-use, or completely remove the following lines.
 
+%% Plots for FIR-filter
+close all;
+
 % Plot the filter coefficiencts and magnitude/phase response
 figure(1);
 stem(h);
-title('Filter coefficients');
+title('Filter coefficients (FIR)');
 
 figure(2);
 N_fft = 1e3;    %Zero-pad FFT for increased frequency resolution
 plot(abs(fft(h, N_fft)));
-title('Filter magnitude response');
+title('Filter magnitude response (FIR)');
 xlabel('f_s/1000');
 ylabel('|H|');
 
 figure(3);
 plot(unwrap(angle(fft(h, N_fft))));
-title('Filter phase response');
+title('Filter phase response (FIR)');
 xlabel('f_s/1000');
 ylabel('arg(H)');
 
@@ -122,43 +125,134 @@ title('Frequency distribution of noise in measured position');
 % Task 4
 noisy_conv = conv(noisy_position,h).*3.6;
 true_conv = conv(true_position,h).*3.6;
-figure(7)
-plot(noisy_conv(1:end))
+
+figure(6)
+plot(noisy_conv(1:end-1))
 hold on
-plot(true_conv(1:end), '--')
+plot(true_conv(1:end-1), '--')
 axis([0 600 0 220])
 xlabel('Time [s]');
 ylabel('Velocity [km/h]');
-title('Filtered velocity in km/h');
+title('Filtered velocity in km/h (FIR)');
 legend('Filtered noisy velocity', 'Filtered true velocity');
 
 %Compensation for delay
-figure(8)
-plot(noisy_conv(61:end))
+figure(7)
+plot(noisy_conv(31:end))
 hold on
-plot(true_conv(61:end), '--')
+plot(true_conv(31:end), '--')
 axis([0 600 0 220])
 xlabel('Time [s]');
 ylabel('Velocity [km/h]');
-title('Filtered velocity in km/h with delay compensated');
+title('Filtered velocity in km/h with delay compensated (FIR)');
 legend('Filtered noisy velocity', 'Filtered true velocity');
 
 % Compensated delay compared to original
-figure(9)
+figure(8)
 plot(noisy_conv(1:end))
 hold on
 plot(true_conv(1:end), '--')
-plot(noisy_conv(61:end))
-plot(true_conv(61:end), '--')
+plot(noisy_conv(31:end-1))
+plot(true_conv(31:end), '--')
 axis([0 600 0 220])
 xlabel('Time [s]');
 ylabel('Velocity [km/h]');
-title('Filtered velocity in km/h with and withoutdelay compensated');
-legend('Filtered noisy', 'Filtered true', 'Filtered, compensated noisy', 'Filtered, compensated true');
+title('Filtered velocity in km/h with and without delay compensated (FIR)');
+legend('Filtered noisy', 'Filtered true', 'Filtered, compensated, noisy', 'Filtered, compensated, true');
 
+
+%% Euler
+close all;
+h_euler = funs.gen_euler();
+
+% Plot the filter coefficiencts and magnitude/phase response
+figure(1);
+stem(h_euler);
+title('Filter coefficients');
+
+figure(2);
+N_fft = 1e3;    %Zero-pad FFT for increased frequency resolution
+plot(abs(fft(h_euler, N_fft)));
+title('Filter magnitude response (Euler)');
+xlabel('f_s/1000');
+ylabel('|H|');
+
+figure(3);
+plot(unwrap(angle(fft(h_euler, N_fft))));
+title('Filter phase response (Euler)');
+xlabel('f_s/1000');
+ylabel('arg(H)');
+
+% Plot the reference signals
+% figure(4);
+% plot(noisy_position);
+% hold on;
+% plot(true_position);
+% title('Reference signals');
+% ylabel('Some unit?');
+% xlabel('Some unit?');
+% legend('Noisy position', 'True position');
+
+% Generate a plot of the noise frequency distribution
+% We can "cheat" and get the noise by subtracting the true signal from the
+%  measured position
+% n = noisy_position - true_position;
+% figure(5);
+% plot(abs(fft(n)).^2);
+% xlabel('Some frequency unit?');
+% ylabel('Periodogram of noise');
+% title('Frequency distribution of noise in measured position');
+
+% Task 4
+% Convolutions of the noisy and true position. 
+noisy_conv = conv(noisy_position,h_euler).*3.6;
+true_conv = conv(true_position,h_euler).*3.6;
+
+% Plot of filtered noisy and true velocity. Last sample removed as
+% commanded in assignment.
+figure(6)
+plot(noisy_conv(1:end-1))
+hold on
+plot(true_conv(1:end-1), '--')
+axis([0 600 0 220])
+xlabel('Time [s]');
+ylabel('Velocity [km/h]');
+title('Filtered velocity in km/h (Euler)');
+legend('Filtered noisy velocity', 'Filtered true velocity');
+
+
+%% Comparison FIR and Euler
+close all;
+
+fir_noisy_conv = conv(noisy_position,h).*3.6;
+fir_true_conv = conv(true_position,h).*3.6;
+euler_noisy_conv = conv(noisy_position,h_euler).*3.6;
+euler_true_conv = conv(true_position,h_euler).*3.6;
+
+figure(1)
+plot(fir_noisy_conv(1:end))
+hold on
+plot(fir_true_conv(1:end), '--')
+plot(euler_true_conv(1:end-1))
+plot(fir_true_conv(31:end), '--')
+axis([0 600 0 220])
+xlabel('Time [s]');
+ylabel('Velocity [km/h]');
+title('Comparison filtered velocity in km/h');
+legend('FIR-filtered noisy velocity, not compensated', 'FIR-filtered true velocity, not compensated', 'Euler-filtered true velocity', 'FIR-filtered true velocity, compensated');
+
+%% Max velocities
+max_fir_noisy = max(fir_noisy_conv)
+max_fir_true = max(fir_true_conv)
+max_euler_noisy = max(euler_noisy_conv(1:end-1))
+max_euler_true = max(euler_true_conv(1:end-1))
+
+%% Testing
+% Testing as suggested in assignment.
 y1 = [noisy_position; fliplr(noisy_position)];
 y2 = [noisy_position; zeros(length(noisy_position),1)];
 figure(10)
 plot(conv(y1,h))
 hold on
 plot(conv(y2,h))
+
