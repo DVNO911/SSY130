@@ -434,6 +434,16 @@ void my_lms(float const * y, float const * x, float * xhat, float * e, int block
 	 *   lms_coeffs += 2 * mu * y_book * e[n];      //Use some type of loop to update the vector lms_coeffs with the vector y multiplied by scalars 2, mu, e[n].
 	 * }
 	 * ...to here */
+	int n;
+	for(n = 0; n < block_size; n++) {
+		float * y_book = &lms_state[n];
+		//float * xhat_n = &xhat[n];
+		arm_dot_prod_f32(lms_coeffs ,y_book, block_size, &xhat[n]);
+		e[n] = x[n]-xhat[n];
+		for(int m = n; m < block_size; m++) {
+			lms_coeffs[n] += 2*lms_mu*y_book[m]*e[n];
+		}
+	}
 #endif
 
 	/* Update lms state, ensure the lms_taps-1 first values correspond to the
