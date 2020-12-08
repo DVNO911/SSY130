@@ -424,6 +424,10 @@ void my_lms(float const * y, float const * x, float * xhat, float * e, int block
 #else
 	/* TODO: Add code from here...
 	 *
+	 * ~~~~~~~~~~~~~~~~~~~~~ VARIABLES ~~~~~~~~~~~~~~~~~~~~~
+	 * float const * y, float const * x, float * xhat, float * e, int block_size,
+	 * float lms_mu, float * lms_coeffs, float * lms_state, int lms_taps
+	 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	 * doing block_size lms update iterations, i.e. something like:
 	 * 
 	 * int n;
@@ -434,7 +438,22 @@ void my_lms(float const * y, float const * x, float * xhat, float * e, int block
 	 *   lms_coeffs += 2 * mu * y_book * e[n];      //Use some type of loop to update the vector lms_coeffs with the vector y multiplied by scalars 2, mu, e[n].
 	 * }
 	 * ...to here */
-#endif
+	int n, m, i;
+	for(n = 0; n<block_size; n++){
+		float * y_book = &lms_state[n];
+		arm_dot_prod_f32(lms_coeffs, y_book, lms_taps, xhat+n);
+		e[n] = x[n] - xhat[n];
+
+
+		for(i = 0; i<=lms_taps; i++){
+			lms_coeffs[i] += 2* lms_mu * y_book[i] * e[n];
+		}
+		//for(m = n; m < block_size; m++) {
+		//	lms_coeffs[n] += 2*lms_mu*y_book[n]*e[n];
+		//}
+	}
+#endif		
+
 
 	/* Update lms state, ensure the lms_taps-1 first values correspond to the
 	* lms_taps-1 last values of y, i.e.

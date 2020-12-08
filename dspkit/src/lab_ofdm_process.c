@@ -11,6 +11,7 @@
 #include "lab_ofdm_process.h"
 #include "backend/arm_math.h"
 #include "blocks/sources.h"
+
 #include "blocks/sinks.h"
 #include "util.h"
 #include "macro.h"
@@ -25,7 +26,7 @@
 #if defined(SYSMODE_OFDM)
 
 #define M_ONE_OVER_SQRT_2 	(0.70710678118f)
-
+#define M_PI (3.14159265358979)
 #define LAB_OFDM_AMP_SCALE 	(6)
 
 char message[LAB_OFDM_CHAR_MESSAGE_SIZE];
@@ -204,7 +205,7 @@ void cnvt_cmplx_2_re_im( float * pCmplx, float * pRe, float * pIm, int length ){
 	* one vector with the complex part (pIm). The length of the signal is length.
 	*/
 	int i;
-	for ( i = 0; i < length ;i++) {
+	for (i=0; i < length ;i++) {
 		pRe[i] = pCmplx[2*i];
 		pIm[i] = pCmplx[2*i+1];
 	}
@@ -250,9 +251,16 @@ void ofdm_demodulate(float * pSrc, float * pRe, float * pIm,  float f, int lengt
 #include "../../secret_sauce.h"
 	DO_OFDM_DEMODULATE();
 #else
-	/* TODO: Add code from here... */
-
-	/* ...to here */
+	int i;
+	float inc, omega = 0;
+	inc = -2 * M_PI * f;
+	for(i=0; i<length; i++){
+		pRe[i] = pSrc[i] * arm_cos_f32(omega);
+		pIm[i] = pSrc[i] * arm_sin_f32(omega);
+		omega += inc;
+		//pDst[i] = pRe[i] * arm_cos_f32(omega) - pIm[i] * arm_sin_f32(omega);
+		//omega += inc;
+		}
 #endif
 }
 
@@ -266,9 +274,14 @@ void cnvt_re_im_2_cmplx( float * pRe, float * pIm, float * pCmplx, int length ){
 #include "../../secret_sauce.h"
 		DO_OFDM_RE_IM_2_CMPLX();
 #else
-	/* TODO: Add code from here... */
+int i;
+int j = 0;
+for(i=0; i < 2*length; i+=2){
+	pCmplx[i] = pRe[j];
+	pCmplx[i+1] = pIm[j];
+	j++;
+}
 
-	/* ...to here */
 #endif
 }
 
@@ -295,6 +308,7 @@ void ofdm_conj_equalize(float * prxMes, float * prxPilot,
 	*/
 	//Temporary storage array for general-purpose use
 	float pTmp[2*length];
+	float pTmp2[2*length];
 #ifdef MASTER_MODE
 #include "../../secret_sauce.h"
 	DO_OFDM_CONJ_EQUALIZE();
@@ -306,10 +320,14 @@ void ofdm_conj_equalize(float * prxMes, float * prxPilot,
 	* http://www.keil.com/pack/doc/CMSIS/DSP/html/index.html 
 	* The array pTmp may be freely used and is long enough to store any complex
 	* vector of up to length elements. */
+	arm_cmplx_conj_f32(ptxPilot, pTmp, length);
+	arm_cmplx_mult_cmplx_f32(pTmp, prxPilot, pTmp2, length);
 	
-	/* TODO: Add code from here...*/
+	arm_cmplx_conj_f32(pTmp2, hhat_conj, length); //hhatconj
 
-	/* ...to here */
+	arm_cmplx_mult_cmplx_f32(prxMes, hhat_conj, pEqualized, length);
+
+
 #endif
 }
 

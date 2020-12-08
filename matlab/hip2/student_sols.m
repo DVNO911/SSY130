@@ -9,7 +9,7 @@ function [funs, student_id] = student_sols()
 % Should a numeric value of format YYYYMMDD, e.g.
 % student_id = 19900101;
 % This value must be correct in order to generate a valid secret key.
-student_id = 0;
+student_id = 19940803;
 
 
 % ----------------------------------------
@@ -18,11 +18,14 @@ student_id = 0;
 % Your task is to implement the following skeleton functions.
 % You are free to use any of the utility functions located in the same
 % directory as this file as well as any of the standard matlab functions.
-
-
-    function h = gen_filter()
-        h = 0; %TODO: This line is missing some code!
-    end
+dt = 1;
+fs = 1/dt;
+  function h = gen_filter()
+       f = [0 0.05 0.1 fs/2]/(fs/2) %freq vec
+       a = [0 1 0 0] .*f*2*pi*(fs/2)%amplitude vec
+       n = 60; %order 60 because 61 coefficients(order N if there are N+1 coefficients)
+       h = firpm(n, f, a, 'differentiator');
+   end
 
 funs.gen_filter = @gen_filter;
 

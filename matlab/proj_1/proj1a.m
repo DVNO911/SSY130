@@ -36,7 +36,7 @@
 % to all the functions you've written in student_sols.m. See below for
 % exactly how to call them in this assignment.
 %
-% -------------------------------------------------------------------------
+% ------------------------------    -------------------------------------------
 %                    Final notes
 % -------------------------------------------------------------------------
 %
@@ -68,7 +68,7 @@ clear variables
 format short eng
 
 % Perform all self-tests of functions in student_sol.m
-apply_tests();
+%apply_tests();
 
 % Load student-written functions
 funs = student_sols();
@@ -89,11 +89,11 @@ N = 272;         % Number of OFDM (QPSK) symbols to transmit.
 N_cp = 0;        % Length of cyclic prefix
 snr = inf;       % Receiver side SNR [dB]
 sync_err = 0;    % Negative values imply early frame sync
-channel_known = true;   %Set true to use the known channel, false to use the unknown channel
+channel_known = false;   %Set true to use the known channel, false to use the unknown channel
 
 % Text to send, must correspond to at least N OFDM symbols
 tx_str = ['Alice: Would you tell me, please, which way I ought to go from here? ' ...
-    'The Cheshire Cat: That depends a good deal on where you want to get to. ' ...
+    'The Cheshtrueire Cat: That depends a good deal on where you want to get to. ' ...
     'Alice: I don''t much care where. ' ...
     'The Cheshire Cat: Then it doesn''t much matter which way you go. ' ...
     'Alice: ...So long as I get somewhere. ' ...
@@ -113,17 +113,17 @@ pilot_str = pilot_str(1:N/4);
 tx = string2bits(tx_str);
 pilot = string2bits(pilot_str);
 
-% Define a baseband channel
+%Define a baseband channel
 
 %h = zeros(60,1); h(1) = 1;   % Ideal
 %h = zeros(60,1); h(1) = 0.5; % Ideal, scaled magnitude
-%h = zeros(60,1); h(1) = exp(1j*1/2);    % Ideal, phase shift by 1/2 radian (~28 degrees)
-h = 0.8.^(0:59)';            % LP model
+h = zeros(60,1); h(1) = exp(1j*pi/4);    % Ideal, phase shift by 1/2 radian (~28 degrees)
+%h = 0.8.^(0:59)'%0.8.^(0:59)';            % LP model
 %h = zeros(60,1); h(1) = 0.5; h(9) = 0.5; % Multipath (2 paths)
 %h = randn(60,1);             % Random Gaussian 
-
+ 
 % Plot the channel response
-figure(1);
+figure( 1);
 subplot(2,1,1);
 title('Channel response');
 plot(abs(fft(h, N)));
@@ -133,7 +133,6 @@ subplot(2,1,2);
 plot(angle(fft(h, N)));
 xlabel('k');
 ylabel('arg(H(k))');
-
 
 % Utility function to remove non-printable characters from a string
 clean_str = @(str) regexprep(str, '[^ -~]+', '_');

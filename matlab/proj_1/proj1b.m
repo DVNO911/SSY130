@@ -68,7 +68,7 @@ clear variables
 format short eng
 
 % Perform all self-tests of functions in student_sol.m
-apply_tests();
+%apply_tests();
 
 % Load student-written functions
 funs = student_sols();
@@ -143,7 +143,7 @@ else
     % Draw a plot of the channel's impulse response
     [~, ~, h] = simulate_audio_channel(0, f_s, inf, 0);
     figure(2);
-    stem(h);
+    stem(h);    
     title('Channel impulse response');
     xlabel('Samples');
     ylabel('Impulse response');

@@ -15,24 +15,29 @@
  * DSP effects to either the internal waveform or the microphone input,
  * switching between effects depending on keys pressed on the keyboard and
  * between audio sources when pressing the user button.
+ * 
  * SYSMODE_TEST2; will compile the project in a basic loop-back mode.
  * Will output the waveform to the left channel and output the microphone input
  * to the right channel. Can be used to verify the functionality of the entire
  * board and build environment and as a minimalist example of how to access the
  * microphone input and speaker outputs.
+ * 
  * SYSMODE_TEST3; will compile the project to apply a frequency shift to the
  * microphone input and play back the result on both output channels. The
  * frequency shift is implemented using the FFT, where the size of the FFT is
  * set to AUDIO_BLOCKSIZE.
+ * 
  * SYSMODE_TEST4; will compile the project to output a QPSK-modulated ASCII
  * bitstream on the left channel when the button is pressed and implement a ML
  * receiver on the microphone input, displaying received characters on the
  * terminal.
+ * 
  * SYSMODE_TEST5; will compile the project to apply a frequency shift to the
  * a signal souce by multiplying the recieved signal with a sinusoid.
  * The frequency-shifted output is played back to the left speaker.
  * The frequency shift amount, waveform source, and choice of upper, lower, or 
  * both sidebands can be selected during runtime.
+ * 
  * SYSMODE_RADAR; will compile the project for a pulse radar (i.e.
  * time-of-flight) distance-measurement example.
  * (See https://en.wikipedia.org/wiki/Radar#Transit_time)
@@ -58,7 +63,7 @@
  * 
  */
 //Fully functional example system modes
-#define SYSMODE_TEST1
+//#define SYSMODE_TEST1
 //#define SYSMODE_TEST2
 //#define SYSMODE_TEST3
 //#define SYSMODE_TEST4
@@ -68,7 +73,7 @@
 
 //Student project system modes
 //#define SYSMODE_OFDM
-//#define SYSMODE_LMS
+#define SYSMODE_LMS
 
 #if (1 != defined(SYSMODE_TEST1) + defined(SYSMODE_TEST2) + defined(SYSMODE_TEST3) + defined(SYSMODE_TEST4) + defined(SYSMODE_TEST5) + defined(SYSMODE_LMS) + defined(SYSMODE_OFDM) + defined(SYSMODE_RADAR) + defined(SYSMODE_FFT))
 #error Exactly one operation mode must be selected!

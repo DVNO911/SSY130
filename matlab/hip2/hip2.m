@@ -36,7 +36,7 @@
 %
 % -------------------------------------------------------------------------
 %                    Final notes
-% -------------------------------------------------------------------------
+% --------------3.5-----------------------------------------------------------
 %
 % The apply_tests() function will set the random-number generator to a
 % fixed seed (based on the student_id parameter). This means that repeated
@@ -62,9 +62,30 @@
 
 % Do some cleanup
 clc
+clf
 clear variables
+clear all
 format short eng
 
+%euler convolution
+figure(1)
+dt = 1;
+h_euler = [1/dt -1/dt];
+load('hip2.mat')
+true_euler_fir = conv(true_position, h_euler)*3.6;
+noisy_euler_fir = conv(noisy_position, h_euler)*3.6;
+
+%true_euler_fir = [true_euler_fir(60:end)]
+%noisy_euler_fir = [noisy_euler_fir(60:end)]
+plot(true_euler_fir)
+axis([0 500 -300 1000])
+hold on
+plot(noisy_euler_fir)
+
+ylabel('Km/h')
+xlabel('t')
+%plot(noisy_eule1r_fir)
+%%
 % Perform all self-tests of functions in student_sol.m
 apply_tests();
 
@@ -83,15 +104,40 @@ load hip2.mat
 % Plot the filter coefficiencts and magnitude/phase response
 figure(1);
 stem(h);
+axis([0 62 -0.04 0.04])
 title('Filter coefficients');
 
 figure(2);
 N_fft = 1e3;    %Zero-pad FFT for increased frequency resolution
 plot(abs(fft(h, N_fft)));
-title('Filter magnitude response');
-xlabel('A frequency unit (which?)');
-ylabel('|H|');
+amp = 0.1*2*pi*100
+x1 = [0 0.35]; x2 = [0.35 0]; x3 = [0 0];
+y1 = [0 amp]; y2 = [amp 100]; y3 = [100 500];
+hold on
+%line(y1,x1,'color','red'); line(y2,x2,'color','red'); line(y3,x3,'color','red');
+%axis([0 100 0 0.1])
 
+axis([0 500 0 0.4])
+title('Filter magnitude response');
+xlabel('x*2*pi*100 [Hz]');
+ylabel('|H|');
+%%
+clf
+figure(3)
+dt = 1;
+load('hip2.mat')
+true_fir = conv(true_position, h) * 3.6;
+noisy_fir = conv(noisy_position, h) * 3.6;
+true_fir = [true_fir(30:end)]
+noisy_fir = [noisy_fir(30:end)]
+plot(true_fir)
+hold on
+plot(noisy_fir)
+ylabel('Km/h')
+xlabel('t')
+axis([0 550 -50 150])
+hold on
+%%
 figure(3);
 plot(unwrap(angle(fft(h, N_fft))));
 title('Filter phase response');

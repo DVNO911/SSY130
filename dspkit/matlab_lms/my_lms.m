@@ -7,7 +7,7 @@ function [xhat, e, lms_coeffs, lms_coeffs_history] = my_lms(lms_state, lms_coeff
 	%		block_size	The number of iterations to perform (also the length of x)
 	%		mu 			The step-size
 	%
-	%	Output:
+	%	Output: 
 	%		xhat 		The result of convolving 'y' with the current estimated channel, for all iterations
 	%		e 			The error, defined as xhat - x
 	%		lms_coeffs	The new estimated channel response after block_size iterations
@@ -27,7 +27,7 @@ function [xhat, e, lms_coeffs, lms_coeffs_history] = my_lms(lms_state, lms_coeff
 	for k=1:block_size
 		%Generate indices of lms_state that corresponds to y(k)
 		%i.e. for the current iteration, what was the vector y?
-		idx_y = k:k + length(lms_coeffs) - 1;
+		idx_y = k:k + length(lms_coeffs) - 1; %-1 ty matlab
 		
 		%Do one single LMS iteration
 		[xhat(k), e(k), lms_coeffs] = doLms(lms_state(idx_y), lms_coeffs, x(k), mu);
@@ -41,6 +41,6 @@ end
 function [xhat, e, h] = doLms(y, h, x, mu)
 	%Do a single LMS iteration
 	xhat = y(:).' * h(:);	%Use (:) to force y, h to be column vectors, then '*' gives the dot product
-	e = x - xhat;
+	e = x - xhat
 	h = h + 2 * mu * y * e;
 end
