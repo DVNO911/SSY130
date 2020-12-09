@@ -1,0 +1,2 @@
+[12/9/2020, 8:57:07 PM] For C source files, IntelliSenseMode was changed from "gcc-x64" to "gcc-arm" based on compiler args and probing compilerPath: "/home/albin/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc"
+[12/9/2020, 8:57:07 PM] For C++ source files, IntelliSenseMode was changed from "gcc-x64" to "gcc-arm" based on compiler args and probing compilerPath: "/home/albin/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc"
