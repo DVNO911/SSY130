@@ -1,0 +1,21 @@
+[2020-12-10 10:08:14.718] [renderer1] [error] Bad progress location: platformio-ide.projectTasks: Error: Bad progress location: platformio-ide.projectTasks
+    at E.withProgress (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:6315:719)
+    at h.$startProgress (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4428:402)
+    at p._doInvokeHandler (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4475:707)
+    at p._invokeHandler (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4475:399)
+    at p._receiveRequest (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4474:59)
+    at p._receiveOneMessage (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4472:886)
+    at file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:4471:34
+    at c.fire (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:99:67)
+    at fire (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:476:523)
+    at t.PersistentProtocol._receiveMessage (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:481:629)
+    at file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:478:635
+    at c.fire (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:99:67)
+    at g.acceptChunk (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:473:978)
+    at file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:473:330
+    at Socket.t (file:///snap/code/50/usr/share/code/resources/app/out/vs/workbench/workbench.desktop.main.js:483:276)
+    at Socket.emit (events.js:223:5)
+    at addChunk (_stream_readable.js:309:12)
+    at readableAddChunk (_stream_readable.js:290:11)
+    at Socket.Readable.push (_stream_readable.js:224:10)
+    at Pipe.onStreamRead (internal/stream_base_commons.js:181:23)

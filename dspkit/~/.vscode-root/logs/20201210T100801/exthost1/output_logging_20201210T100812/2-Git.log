@@ -1,0 +1,73 @@
+Looking for git in: git
+Using git 2.25.1 from git
+> git rev-parse --git-dir
+Open repository: /home/albin/Chalmers/Applied-Signal-Processing/ssy130-files
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git check-ignore -v -z --stdin
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git check-ignore -v -z --stdin
+> git show --textconv :dspkit/src/lab_lms.c
+> git ls-files --stage -- /home/albin/Chalmers/Applied-Signal-Processing/ssy130-files/dspkit/src/lab_lms.c
+> git cat-file -s 794358e8211785ad96657664e675e9a2f2a16d2e
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
+> git status -z -u
+> git symbolic-ref --short HEAD
+> git rev-parse Albin
+> git rev-parse --symbolic-full-name Albin@{u}
+> git rev-list --left-right Albin...refs/remotes/origin/Albin
+> git for-each-ref --sort -committerdate --format %(refname) %(objectname)
+> git remote --verbose
+> git config --get commit.template
